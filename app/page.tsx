@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic"
 
-const Canvas = dynamic(() => import("@/components/Canvas"), { ssr: false })
+const Canvas = dynamic(() => import("@/Components/Canvas"), { ssr: false })
 
 export default function Home() {
   return (
