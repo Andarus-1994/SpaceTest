@@ -1,4 +1,4 @@
-import { useAnimations, useGLTF, useScroll, Environment } from "@react-three/drei"
+import { useAnimations, useGLTF, useScroll, Environment, Text3D } from "@react-three/drei"
 import { useFrame } from "@react-three/fiber"
 import { useEffect, useRef, useState } from "react"
 import { Group, MeshStandardMaterial, Mesh, Vector3, Line } from "three"
@@ -9,6 +9,7 @@ useGLTF.preload("/water_orb.glb")
 
 export default function Water() {
   const group = useRef<Group>(null)
+  const textRef = useRef<typeof Text3D | null>(null)
   const { nodes, materials, animations, scene } = useGLTF("/water_orb.glb")
   const { actions, clips } = useAnimations(animations, scene)
 
@@ -79,7 +80,7 @@ export default function Water() {
     waterMesh.position.set(0, -5, -12)
     waterMesh.rotation.x = -Math.PI / 3
 
-    waterMesh2.position.set(0, -5, -12)
+    waterMesh2.position.set(0, -6, -12)
     waterMesh2.rotation.x = -Math.PI / 3
 
     scene.add(waterMesh)
@@ -96,18 +97,18 @@ export default function Water() {
 
   useFrame(() => {
     if (waterMeshRef.current) {
-      waterMeshRef.current.position.y = scroll.offset * -2
+      waterMeshRef.current.position.y = scroll.offset
       waterMeshRef.current.position.x = scroll.offset * -10
-      waterMeshRef.current.rotation.x = -4 - scroll.offset * 2 // No rotation around X-axis
-      waterMeshRef.current.rotation.y = -Math.PI * scroll.offset // Rotate 90 degrees around Y-axis (horizontal)
-      waterMeshRef.current.rotation.z = 0 // No rotation around Z-axis
+      waterMeshRef.current.rotation.x = -4 - scroll.offset * 2
+      waterMeshRef.current.rotation.y = -Math.PI * scroll.offset
+      waterMeshRef.current.rotation.z = 0
     }
     if (waterMesh2Ref.current) {
-      waterMesh2Ref.current.position.y = scroll.offset * -2
+      waterMesh2Ref.current.position.y = scroll.offset
       waterMesh2Ref.current.position.x = scroll.offset * -10
-      waterMesh2Ref.current.rotation.x = -4 - scroll.offset * 2 // No rotation around X-axis
-      waterMesh2Ref.current.rotation.y = -Math.PI * scroll.offset * -2 // Rotate 90 degrees around Y-axis (horizontal)
-      waterMesh2Ref.current.rotation.z = 0 // No rotation around Z-axis
+      waterMesh2Ref.current.rotation.x = -4 - scroll.offset * 3
+      waterMesh2Ref.current.rotation.y = -Math.PI * scroll.offset
+      waterMesh2Ref.current.rotation.z = 0
     }
 
     if (lightRef.current && nodes && nodes["Object_5"] && nodes["Object_7"]) {
@@ -117,13 +118,18 @@ export default function Water() {
       lightRef.current.geometry.attributes.position.setXYZ(0, endPoint.x, endPoint.y, endPoint.z)
       lightRef.current.geometry.attributes.position.needsUpdate = true
     }
+    if (textRef.current) {
+      textRef.current.position.set(scroll.offset * -5 - 6, scroll.offset + 4, -scroll.offset * 7)
+      textRef.current.scale.x = 0.5
+      textRef.current.fontSize = 1
+    }
   })
 
   const lightRef = useRef<Line | null>(null)
 
   useEffect(() => {
     // Create the light ray
-
+    console.log(textRef)
     const startPoint = new Vector3(0, 0, 0)
     const endPoint = new Vector3(-30, 5, -50)
     const lightRay = createLightRay(startPoint, endPoint)
@@ -139,7 +145,11 @@ export default function Water() {
     <>
       <group ref={group}>
         <primitive object={scene} />
+        <Text3D ref={textRef} font="./fonts/helvetiker_regular.typeface.json" fontSize={1} color="#6a6f6f" castShadow>
+          Two.
+        </Text3D>
       </group>
+
       <Environment preset="studio" />
     </>
   )

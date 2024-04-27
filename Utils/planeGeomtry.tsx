@@ -9,10 +9,10 @@ export default function createRoundedPlaneGeometry(width: number, height: number
   const halfHeight = height / 2
 
   // Define the number of segments for the rounded corners
-  const segments = 32
+  const segments = 120
 
   // Define the angle step for each segment
-  const angleStep = (Math.PI * 2) / segments
+  const angleStep = (Math.PI * 4) / segments
 
   // Create the rounded corners
   for (let i = 0; i <= segments; i++) {
@@ -24,7 +24,7 @@ export default function createRoundedPlaneGeometry(width: number, height: number
   }
 
   // Set the vertices attribute
-  geometry.setAttribute("position", new Float32BufferAttribute(vertices, 3))
+  geometry.setAttribute("position", new Float32BufferAttribute(vertices, 2))
 
   return geometry
 }
