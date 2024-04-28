@@ -16,12 +16,8 @@ export default function Water() {
   const scroll = useScroll()
 
   useEffect(() => {
-    console.log(materials)
-    console.log(actions)
-    console.log(nodes)
     //@ts-ignore
     actions["RootAction"].play().paused = true
-    console.log(nodes["Object_5"])
   }, [])
 
   useFrame(() => {
@@ -151,11 +147,9 @@ export default function Water() {
         {/* 
 // @ts-ignore */}
         <Text3D ref={textRef} font="./fonts/helvetiker_regular.typeface.json" fontSize={1} color="#6a6f6f" castShadow>
-          Two.
+          2
         </Text3D>
       </group>
-
-      <Environment preset="studio" />
     </>
   )
 }
