@@ -1,6 +1,6 @@
 import { useAnimations, useGLTF, useScroll, Environment, Text3D } from "@react-three/drei"
 import { useFrame } from "@react-three/fiber"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { Group, MeshStandardMaterial, Mesh, Vector3, Line } from "three"
 import createRoundedPlaneGeometry from "../Utils/planeGeomtry"
 import createLightRay from "@/Utils/lightRay"
@@ -9,7 +9,7 @@ useGLTF.preload("/water_orb.glb")
 
 export default function Water() {
   const group = useRef<Group>(null)
-  const textRef = useRef<typeof Text3D | null>(null)
+  const textRef = useRef<Text | null>(null)
   const { nodes, materials, animations, scene } = useGLTF("/water_orb.glb")
   const { actions, clips } = useAnimations(animations, scene)
 
@@ -119,8 +119,11 @@ export default function Water() {
       lightRef.current.geometry.attributes.position.needsUpdate = true
     }
     if (textRef.current) {
+      // @ts-ignore comment
       textRef.current.position.set(scroll.offset * -5 - 6, scroll.offset + 4, -scroll.offset * 7)
+      // @ts-ignore comment
       textRef.current.scale.x = 0.5
+      // @ts-ignore comment
       textRef.current.fontSize = 1
     }
   })
@@ -145,6 +148,8 @@ export default function Water() {
     <>
       <group ref={group}>
         <primitive object={scene} />
+        {/* 
+// @ts-ignore */}
         <Text3D ref={textRef} font="./fonts/helvetiker_regular.typeface.json" fontSize={1} color="#6a6f6f" castShadow>
           Two.
         </Text3D>
